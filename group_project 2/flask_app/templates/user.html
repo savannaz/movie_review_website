@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Film Reviews</title>
+    <!-- Required meta tags -->
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <!-- load CSS -->
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/style.css') }}">
+    <!-- Optional JavaScript -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-gtEjrD/SeCtmISkJkNUaaKMoLD0//ElJ19smozuHV6z3Iehds+3Ulb9Bn9Plx0x4" crossorigin="anonymous"></script>
+</head>
+<body>
+    <div class="nav">
+        <p>Film Reviews</p>
+        <div>
+            <p> {{ user.first_name }} {{ user.last_name }} </p>
+            <a href="/dashboard" class="link">Dashboard</a>
+            <a href="/logout" class="link">Logout</a>
+        </div>
+    </div>
+
+    <div class="header center">{{ userVis.first_name }} {{ userVis.last_name }}</div>
+    <div class="header center"><p>Joined:  {{ userVis.created_at }}</p></div>
+    <div class="header center"><p>Bio: {{ userVis.bio }}</p></div>
+    {% if user.id == userVis.id %}
+    <div class="header center">
+        <form action = "/user/update_bio/{{user.id}}" method = "POST">
+            <textarea name="bio" cols='30' rows='4' class="rounded">{{user.bio}}</textarea>
+            <div><input type="submit" value="Submit"></div>
+        </form>
+    </div>
+    {% endif %}
+    <div class="header center"><h3>Reviews</h3></div>
+    <div>
+        {% for this_review in reviews %}
+            {% if this_review.users_id == userVis.id %}
+                <span class="header center font-weight-bold">
+                    {% for movie in movies %}
+                        {% if this_review.movies_id == movie.id %}
+                            {{movie.name}}:
+                        {% endif %}
+                    {% endfor %}
+                    {{this_review.rating}}/5
+                </span>
+                <p class="header center">{{this_review.comment}}</p>
+                {% if user.id == userVis.id %}
+                    <a href="/review/edit/{{this_review.id}}" class="header center">Edit</a>
+                    <span><a href="/review/delete/{{ this_review.id }}" class="header center">Delete</a></span>
+                {% endif %}
+                <p class="header center">__________________________________</p>
+            {% endif %}
+        {% endfor %}
+    </div>
+</body>
+</html>

@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Film Reviews</title>
+    <!-- Required meta tags -->
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <!-- load CSS -->
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/style.css') }}">
+    <!-- Optional JavaScript -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-gtEjrD/SeCtmISkJkNUaaKMoLD0//ElJ19smozuHV6z3Iehds+3Ulb9Bn9Plx0x4" crossorigin="anonymous"></script>
+</head>
+<body>
+    <div class="nav">
+        <p>Film Reviews</p>
+        <div>
+            <p> {{ user.first_name }} {{ user.last_name }}</p>
+            <a href="/dashboard" class="link">Dashboard</a>
+            <a href="/logout" class="link">Logout</a>
+        </div>
+    </div>
+    <div id="flash_message" class="bg-primary text-danger m-2 text-center ">
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                <h2 class="col bg-primary text-warning m-2">Something went wrong!</h2>
+                    {% for message in messages %}
+                        <p class="col bg-primary text-light m-2">{{message}}</p>
+                    {% endfor %}
+            {% endif %}
+        {% endwith %}
+    </div>
+    <form action="/review/update/{{review.id}}" method="POST">
+        <div class="start">Score: <input type="number" name="rating" min="1" max="5" value="{{review.rating}}">/5</div>
+        <textarea cols="100%" rows="8" class="start" name="comment">{{review.comment}}</textarea>
+        <input type="submit" value="Submit"></button>
+    </form>
+</body>
+</html>
